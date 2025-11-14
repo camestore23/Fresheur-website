@@ -237,6 +237,7 @@
             { id: "vegetarien", name: "Végétarien", description: "Pas de viande ni poisson" },
             { id: "vegan", name: "Vegan", description: "Aucun produit animal" },
             { id: "pescetarien", name: "Pescétarien", description: "Poisson mais pas de viande" }
+             { id: "hallal", name: "hallal", description: "Uniquement des aliments conformes aux règles halal" }
         ];
 
         const COMMON_ALLERGENS = [
@@ -244,7 +245,7 @@
             "arachides", "fruits à coque", "soja", "céleri", "moutarde"
         ];
 
-        const STORES = ["Delhaize", "Colruyt", "Carrefour", "Aldi", "Lidl"];
+        const STORES = ["Delhaize", "Colruyt", "Carrefour", "Aldi", "Lidl", "Intermarché"];
 
         function FresheurApp() {
             const [currentStep, setCurrentStep] = useState('welcome');

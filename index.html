@@ -3,839 +3,550 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fresheur.be - Recettes et Courses Intelligentes</title>
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Créez vos repas délicieux - Meal Planner</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8f5e9 100%);
+            min-height: 100vh;
+            padding: 20px;
         }
-        
-        .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
         }
-        
-        .fresh-gradient {
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 0.6s ease;
         }
-        
-        .card-hover {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+        .logo-container {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
         }
-        
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+
+        .logo {
+            width: 100px;
+            height: 100px;
+            filter: drop-shadow(0 4px 12px rgba(76, 175, 80, 0.3));
         }
-        
-        .recipe-card {
+
+        .tagline {
+            font-size: 28px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #7f8c8d;
+        }
+
+        /* Main Card */
+        .main-card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            padding: 40px;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        /* Section */
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-icon {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+
+        /* Select Dropdown */
+        .select-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        select {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background: white;
             cursor: pointer;
-            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23666' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 20px center;
+            padding-right: 50px;
         }
-        
-        .recipe-card.selected {
-            border-color: #38ef7d;
-            background-color: #f0fdf4;
+
+        select:hover {
+            border-color: #4CAF50;
         }
-        
-        .badge {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 500;
+
+        select:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
         }
-        
-        .animate-fade-in {
-            animation: fadeIn 0.5s ease-in;
+
+        /* Budget Slider */
+        .budget-container {
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            color: white;
         }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+
+        .budget-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .budget-slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.3);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .budget-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            transition: transform 0.2s ease;
+        }
+
+        .budget-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .budget-slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        /* People Counter */
+        .people-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 12px;
+        }
+
+        .people-btn {
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 24px;
+            font-weight: 600;
+            color: #666;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .people-btn:hover {
+            border-color: #4CAF50;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+        }
+
+        .people-btn.active {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            border-color: #4CAF50;
+            color: white;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+
+        .people-btn::before {
+            content: '👤';
+            display: block;
+            font-size: 32px;
+            margin-bottom: 5px;
+        }
+
+        /* Equipment Cards */
+        .equipment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 16px;
+        }
+
+        .equipment-card {
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 16px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .equipment-card:hover {
+            border-color: #FF6B6B;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.2);
+        }
+
+        .equipment-card.selected {
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+            border-color: #FF6B6B;
+            color: white;
+        }
+
+        .equipment-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .equipment-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* Generate Button */
+        .generate-section {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .generate-btn {
+            padding: 18px 60px;
+            font-size: 18px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .generate-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .generate-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(76, 175, 80, 0.5);
+        }
+
+        .generate-btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-text {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-card {
+                padding: 24px;
+            }
+
+            .tagline {
+                font-size: 22px;
+            }
+
+            .people-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .equipment-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     </style>
 </head>
-<body class="bg-gray-50">
-    <div id="root"></div>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo-container">
+                <img src="Logo1.PNG" alt="Logo" class="logo">
+            </div>
+            <h1 class="tagline">Créez des repas délicieux en un clic</h1>
+            <p class="subtitle">Personnalisez votre expérience culinaire</p>
+        </div>
 
-    <script type="text/babel">
-        const { useState, useEffect } = React;
+        <!-- Main Card -->
+        <div class="main-card">
+            <!-- Régime Alimentaire -->
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="section-icon">🥗</span>
+                    Régime alimentaire
+                </h2>
+                <div class="select-wrapper">
+                    <select id="regime">
+                        <option value="">Aucune restriction</option>
+                        <option value="vegetarien">Végétarien</option>
+                        <option value="vegan">Vegan</option>
+                        <option value="sans-gluten">Sans gluten</option>
+                        <option value="paleo">Paléo</option>
+                        <option value="keto">Keto</option>
+                    </select>
+                </div>
+            </div>
 
-        // Sample recipes database
-        const RECIPES_DATABASE = [
-            {
-                id: 1,
-                name: "Spaghetti Bolognaise",
-                category: "Pâtes",
-                time: 30,
-                difficulty: "Facile",
-                price: 3.50,
-                servings: 4,
-                dietary: ["omnivore"],
-                excludedIngredients: [],
-                ingredients: [
-                    { name: "Spaghetti", amount: "500g", price: 0.89, category: "Épicerie", common: false },
-                    { name: "Viande hachée", amount: "400g", price: 4.50, category: "Boucherie", common: false },
-                    { name: "Tomates concassées", amount: "400g", price: 0.95, category: "Épicerie", common: false },
-                    { name: "Oignon", amount: "1", price: 0.25, category: "Fruits & Légumes", common: true },
-                    { name: "Ail", amount: "2 gousses", price: 0.15, category: "Fruits & Légumes", common: true },
-                    { name: "Huile d'olive", amount: "2 c.à.s", price: 0.20, category: "Épicerie", common: true },
-                    { name: "Sel et poivre", amount: "Au goût", price: 0.05, category: "Épicerie", common: true }
-                ],
-                image: "🍝"
-            },
-            {
-                id: 2,
-                name: "Salade César au Poulet",
-                category: "Salade",
-                time: 20,
-                difficulty: "Facile",
-                price: 4.20,
-                servings: 2,
-                dietary: ["omnivore"],
-                excludedIngredients: [],
-                ingredients: [
-                    { name: "Laitue romaine", amount: "1", price: 1.20, category: "Fruits & Légumes", common: false },
-                    { name: "Poulet", amount: "200g", price: 2.80, category: "Boucherie", common: false },
-                    { name: "Parmesan", amount: "50g", price: 1.50, category: "Crémerie", common: false },
-                    { name: "Croûtons", amount: "100g", price: 0.95, category: "Épicerie", common: false },
-                    { name: "Sauce César", amount: "100ml", price: 1.20, category: "Épicerie", common: false },
-                    { name: "Huile d'olive", amount: "1 c.à.s", price: 0.10, category: "Épicerie", common: true }
-                ],
-                image: "🥗"
-            },
-            {
-                id: 3,
-                name: "Curry de Légumes Vegan",
-                category: "Végétarien",
-                time: 35,
-                difficulty: "Moyen",
-                price: 3.80,
-                servings: 4,
-                dietary: ["vegetarien", "vegan"],
-                excludedIngredients: ["viande", "poisson", "produits laitiers", "oeufs"],
-                ingredients: [
-                    { name: "Pois chiches", amount: "400g", price: 0.85, category: "Épicerie", common: false },
-                    { name: "Lait de coco", amount: "400ml", price: 1.45, category: "Épicerie", common: false },
-                    { name: "Curry en poudre", amount: "2 c.à.s", price: 0.30, category: "Épicerie", common: true },
-                    { name: "Carottes", amount: "2", price: 0.40, category: "Fruits & Légumes", common: false },
-                    { name: "Courgette", amount: "1", price: 0.80, category: "Fruits & Légumes", common: false },
-                    { name: "Oignon", amount: "1", price: 0.25, category: "Fruits & Légumes", common: true },
-                    { name: "Riz", amount: "300g", price: 0.60, category: "Épicerie", common: false },
-                    { name: "Ail", amount: "2 gousses", price: 0.15, category: "Fruits & Légumes", common: true }
-                ],
-                image: "🍛"
-            },
-            {
-                id: 4,
-                name: "Omelette aux Champignons",
-                category: "Oeufs",
-                time: 15,
-                difficulty: "Facile",
-                price: 2.50,
-                servings: 2,
-                dietary: ["vegetarien"],
-                excludedIngredients: ["viande", "poisson"],
-                ingredients: [
-                    { name: "Oeufs", amount: "4", price: 1.20, category: "Crémerie", common: false },
-                    { name: "Champignons", amount: "200g", price: 1.50, category: "Fruits & Légumes", common: false },
-                    { name: "Fromage râpé", amount: "50g", price: 0.80, category: "Crémerie", common: false },
-                    { name: "Beurre", amount: "20g", price: 0.15, category: "Crémerie", common: true },
-                    { name: "Sel et poivre", amount: "Au goût", price: 0.05, category: "Épicerie", common: true }
-                ],
-                image: "🍳"
-            },
-            {
-                id: 5,
-                name: "Saumon Grillé & Légumes",
-                category: "Poisson",
-                time: 25,
-                difficulty: "Moyen",
-                price: 7.50,
-                servings: 2,
-                dietary: ["omnivore", "pescetarien"],
-                excludedIngredients: ["viande"],
-                ingredients: [
-                    { name: "Filet de saumon", amount: "300g", price: 6.50, category: "Poissonnerie", common: false },
-                    { name: "Brocoli", amount: "200g", price: 1.20, category: "Fruits & Légumes", common: false },
-                    { name: "Citron", amount: "1", price: 0.40, category: "Fruits & Légumes", common: false },
-                    { name: "Huile d'olive", amount: "2 c.à.s", price: 0.20, category: "Épicerie", common: true },
-                    { name: "Sel et poivre", amount: "Au goût", price: 0.05, category: "Épicerie", common: true },
-                    { name: "Ail", amount: "1 gousse", price: 0.08, category: "Fruits & Légumes", common: true }
-                ],
-                image: "🐟"
-            },
-            {
-                id: 6,
-                name: "Pizza Margherita Maison",
-                category: "Pizza",
-                time: 45,
-                difficulty: "Moyen",
-                price: 3.20,
-                servings: 4,
-                dietary: ["vegetarien"],
-                excludedIngredients: ["viande", "poisson"],
-                ingredients: [
-                    { name: "Pâte à pizza", amount: "1", price: 1.20, category: "Boulangerie", common: false },
-                    { name: "Sauce tomate", amount: "200g", price: 0.75, category: "Épicerie", common: false },
-                    { name: "Mozzarella", amount: "200g", price: 2.20, category: "Crémerie", common: false },
-                    { name: "Basilic frais", amount: "1 bouquet", price: 0.80, category: "Fruits & Légumes", common: false },
-                    { name: "Huile d'olive", amount: "1 c.à.s", price: 0.10, category: "Épicerie", common: true },
-                    { name: "Origan", amount: "1 c.à.c", price: 0.05, category: "Épicerie", common: true }
-                ],
-                image: "🍕"
-            },
-            {
-                id: 7,
-                name: "Soupe de Lentilles",
-                category: "Soupe",
-                time: 40,
-                difficulty: "Facile",
-                price: 2.80,
-                servings: 4,
-                dietary: ["vegetarien", "vegan"],
-                excludedIngredients: ["viande", "poisson", "produits laitiers", "oeufs"],
-                ingredients: [
-                    { name: "Lentilles", amount: "300g", price: 0.95, category: "Épicerie", common: false },
-                    { name: "Carottes", amount: "2", price: 0.40, category: "Fruits & Légumes", common: false },
-                    { name: "Céleri", amount: "2 branches", price: 0.50, category: "Fruits & Légumes", common: false },
-                    { name: "Oignon", amount: "1", price: 0.25, category: "Fruits & Légumes", common: true },
-                    { name: "Bouillon de légumes", amount: "1L", price: 0.60, category: "Épicerie", common: false },
-                    { name: "Cumin", amount: "1 c.à.c", price: 0.10, category: "Épicerie", common: true }
-                ],
-                image: "🍲"
-            },
-            {
-                id: 8,
-                name: "Tacos au Boeuf",
-                category: "Mexicain",
-                time: 25,
-                difficulty: "Facile",
-                price: 5.20,
-                servings: 4,
-                dietary: ["omnivore"],
-                excludedIngredients: [],
-                ingredients: [
-                    { name: "Tortillas", amount: "8", price: 1.80, category: "Épicerie", common: false },
-                    { name: "Boeuf haché", amount: "400g", price: 4.80, category: "Boucherie", common: false },
-                    { name: "Salade", amount: "1", price: 0.90, category: "Fruits & Légumes", common: false },
-                    { name: "Tomates", amount: "2", price: 0.60, category: "Fruits & Légumes", common: false },
-                    { name: "Fromage râpé", amount: "100g", price: 1.20, category: "Crémerie", common: false },
-                    { name: "Épices mexicaines", amount: "2 c.à.s", price: 0.30, category: "Épicerie", common: true }
-                ],
-                image: "🌮"
-            }
-        ];
+            <!-- Style de Recette -->
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="section-icon">👨‍🍳</span>
+                    Style de recette
+                </h2>
+                <div class="select-wrapper">
+                    <select id="style">
+                        <option value="">Tous les styles</option>
+                        <option value="francaise">Française</option>
+                        <option value="italienne">Italienne</option>
+                        <option value="asiatique">Asiatique</option>
+                        <option value="mexicaine">Mexicaine</option>
+                        <option value="mediterraneenne">Méditerranéenne</option>
+                    </select>
+                </div>
+            </div>
 
-        const DIETARY_OPTIONS = [
-            { id: "omnivore", name: "Omnivore", description: "Je mange de tout" },
-            { id: "vegetarien", name: "Végétarien", description: "Pas de viande ni poisson" },
-            { id: "vegan", name: "Vegan", description: "Aucun produit animal" },
-            { id: "pescetarien", name: "Pescétarien", description: "Poisson mais pas de viande" }
-             { id: "hallal", name: "hallal", description: "Uniquement des aliments conformes aux règles halal" }
-        ];
+            <!-- Plat du Quotidien -->
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="section-icon">🍽️</span>
+                    Plat du quotidien
+                </h2>
+                <div class="select-wrapper">
+                    <select id="plat">
+                        <option value="">Tous les plats</option>
+                        <option value="entree">Entrée</option>
+                        <option value="plat-principal">Plat principal</option>
+                        <option value="dessert">Dessert</option>
+                        <option value="petit-dejeuner">Petit-déjeuner</option>
+                        <option value="gouter">Goûter</option>
+                    </select>
+                </div>
+            </div>
 
-        const COMMON_ALLERGENS = [
-            "gluten", "produits laitiers", "oeufs", "poisson", "crustacés",
-            "arachides", "fruits à coque", "soja", "céleri", "moutarde"
-        ];
+            <!-- Budget -->
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="section-icon">💰</span>
+                    Budget
+                </h2>
+                <div class="budget-container">
+                    <div class="budget-labels">
+                        <span>Économique</span>
+                        <span>Moyen</span>
+                        <span>Premium</span>
+                    </div>
+                    <input type="range" class="budget-slider" min="1" max="3" value="2" id="budget">
+                </div>
+            </div>
 
-        const STORES = ["Delhaize", "Colruyt", "Carrefour", "Aldi", "Lidl", "Intermarché"];
+            <!-- Nombre de Personnes -->
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="section-icon">👥</span>
+                    Nombre de personnes
+                </h2>
+                <div class="people-grid">
+                    <button class="people-btn" data-value="1">1</button>
+                    <button class="people-btn active" data-value="2">2</button>
+                    <button class="people-btn" data-value="3">3</button>
+                    <button class="people-btn" data-value="4">4</button>
+                    <button class="people-btn" data-value="5">5</button>
+                    <button class="people-btn" data-value="6">6</button>
+                    <button class="people-btn" data-value="7">7</button>
+                    <button class="people-btn" data-value="8">8+</button>
+                </div>
+            </div>
 
-        function FresheurApp() {
-            const [currentStep, setCurrentStep] = useState('welcome');
-            const [userProfile, setUserProfile] = useState({
-                name: '',
-                household: 2,
-                dietary: 'omnivore',
-                excludedIngredients: [],
-                weeklyBudget: 50,
-                preferredStore: 'Delhaize'
+            <!-- Équipements Disponibles -->
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="section-icon">🔧</span>
+                    Équipements disponibles
+                </h2>
+                <div class="equipment-grid">
+                    <div class="equipment-card selected" data-equipment="four">
+                        <div class="equipment-icon">🔥</div>
+                        <div class="equipment-name">Four</div>
+                    </div>
+                    <div class="equipment-card" data-equipment="airfryer">
+                        <div class="equipment-icon">🌪️</div>
+                        <div class="equipment-name">Air Fryer</div>
+                    </div>
+                    <div class="equipment-card" data-equipment="taque">
+                        <div class="equipment-icon">🍳</div>
+                        <div class="equipment-name">Taque de cuisson</div>
+                    </div>
+                    <div class="equipment-card selected" data-equipment="robot">
+                        <div class="equipment-icon">🤖</div>
+                        <div class="equipment-name">Robot cuiseur</div>
+                    </div>
+                    <div class="equipment-card" data-equipment="friteuse">
+                        <div class="equipment-icon">🍟</div>
+                        <div class="equipment-name">Friteuse</div>
+                    </div>
+                    <div class="equipment-card" data-equipment="gril">
+                        <div class="equipment-icon">🔥</div>
+                        <div class="equipment-name">Gril</div>
+                    </div>
+                    <div class="equipment-card" data-equipment="microondes">
+                        <div class="equipment-icon">📻</div>
+                        <div class="equipment-name">Micro-ondes</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Generate Button -->
+            <div class="generate-section">
+                <button class="generate-btn" id="generateBtn">
+                    <span class="btn-text">🎯 Générer 10 recettes</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // People counter
+        const peopleButtons = document.querySelectorAll('.people-btn');
+        peopleButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                peopleButtons.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
             });
-            const [selectedRecipes, setSelectedRecipes] = useState([]);
-            const [shoppingList, setShoppingList] = useState([]);
-            const [commonIngredients, setCommonIngredients] = useState([]);
+        });
 
-            useEffect(() => {
-                const saved = localStorage.getItem('fresheur_profile');
-                if (saved) {
-                    const profile = JSON.parse(saved);
-                    setUserProfile(profile);
-                    if (profile.name) {
-                        setCurrentStep('recipes');
-                    }
-                }
-            }, []);
-
-            const saveProfile = (profile) => {
-                localStorage.setItem('fresheur_profile', JSON.stringify(profile));
-                setUserProfile(profile);
-            };
-
-            const filteredRecipes = RECIPES_DATABASE.filter(recipe => {
-                const matchesDietary = recipe.dietary.includes(userProfile.dietary);
-                const hasExcluded = recipe.excludedIngredients.some(ing => 
-                    userProfile.excludedIngredients.includes(ing)
-                );
-                return matchesDietary && !hasExcluded;
+        // Equipment selection
+        const equipmentCards = document.querySelectorAll('.equipment-card');
+        equipmentCards.forEach(card => {
+            card.addEventListener('click', function() {
+                this.classList.toggle('selected');
             });
+        });
 
-            const toggleRecipe = (recipe) => {
-                if (selectedRecipes.find(r => r.id === recipe.id)) {
-                    setSelectedRecipes(selectedRecipes.filter(r => r.id !== recipe.id));
-                } else {
-                    setSelectedRecipes([...selectedRecipes, recipe]);
-                }
-            };
+        // Generate button animation
+        const generateBtn = document.getElementById('generateBtn');
+        generateBtn.addEventListener('click', function() {
+            this.style.animation = 'pulse 0.6s ease';
+            setTimeout(() => {
+                this.style.animation = '';
+                alert('✨ Génération de vos recettes personnalisées en cours...');
+            }, 600);
+        });
 
-            const generateShoppingList = () => {
-                const ingredientsMap = new Map();
-                const commonItems = [];
-
-                selectedRecipes.forEach(recipe => {
-                    recipe.ingredients.forEach(ingredient => {
-                        if (ingredient.common) {
-                            if (!commonItems.find(i => i.name === ingredient.name)) {
-                                commonItems.push(ingredient);
-                            }
-                        } else {
-                            if (ingredientsMap.has(ingredient.name)) {
-                                const existing = ingredientsMap.get(ingredient.name);
-                                existing.recipes.push(recipe.name);
-                            } else {
-                                ingredientsMap.set(ingredient.name, {
-                                    ...ingredient,
-                                    recipes: [recipe.name],
-                                    checked: false
-                                });
-                            }
-                        }
-                    });
-                });
-
-                setShoppingList(Array.from(ingredientsMap.values()));
-                setCommonIngredients(commonItems);
-                setCurrentStep('shopping');
-            };
-
-            const totalCost = shoppingList.reduce((sum, item) => sum + item.price, 0);
-            const totalRecipeCost = selectedRecipes.reduce((sum, recipe) => sum + recipe.price, 0);
-
-            if (currentStep === 'welcome') {
-                return <WelcomeScreen onStart={() => setCurrentStep('profile')} />;
+        // Budget slider feedback
+        const budgetSlider = document.getElementById('budget');
+        budgetSlider.addEventListener('input', function() {
+            const container = this.closest('.budget-container');
+            const value = this.value;
+            if (value == 1) {
+                container.style.background = 'linear-gradient(135deg, #56ab2f 0%, #a8e063 100%)';
+            } else if (value == 2) {
+                container.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            } else {
+                container.style.background = 'linear-gradient(135deg, #f953c6 0%, #b91d73 100%)';
             }
-
-            if (currentStep === 'profile') {
-                return <ProfileSetup 
-                    userProfile={userProfile}
-                    onSave={(profile) => {
-                        saveProfile(profile);
-                        setCurrentStep('recipes');
-                    }}
-                />;
-            }
-
-            if (currentStep === 'recipes') {
-                return (
-                    <div className="min-h-screen bg-gray-50">
-                        <Header userProfile={userProfile} onProfile={() => setCurrentStep('profile')} />
-                        <RecipeSelection 
-                            recipes={filteredRecipes}
-                            selectedRecipes={selectedRecipes}
-                            onToggle={toggleRecipe}
-                            userProfile={userProfile}
-                        />
-                        {selectedRecipes.length > 0 && (
-                            <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg p-4 border-t">
-                                <div className="max-w-7xl mx-auto flex items-center justify-between">
-                                    <div>
-                                        <p className="text-lg font-semibold">{selectedRecipes.length} recette(s) sélectionnée(s)</p>
-                                        <p className="text-sm text-gray-600">Budget estimé: ~{totalRecipeCost.toFixed(2)}€</p>
-                                    </div>
-                                    <button
-                                        onClick={generateShoppingList}
-                                        className="fresh-gradient text-white px-8 py-3 rounded-full font-semibold hover:opacity-90 transition"
-                                    >
-                                        Créer ma liste de courses →
-                                    </button>
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                );
-            }
-
-            if (currentStep === 'shopping') {
-                return (
-                    <ShoppingList 
-                        shoppingList={shoppingList}
-                        commonIngredients={commonIngredients}
-                        totalCost={totalCost}
-                        userProfile={userProfile}
-                        onBack={() => setCurrentStep('recipes')}
-                        onUpdate={setShoppingList}
-                        onUpdateCommon={setCommonIngredients}
-                    />
-                );
-            }
-        }
-
-        function WelcomeScreen({ onStart }) {
-            return (
-                <div className="min-h-screen fresh-gradient flex items-center justify-center p-4">
-                    {/* Construction Banner */}
-                    <div className="fixed top-0 left-0 right-0 bg-yellow-400 text-gray-900 py-3 px-4 text-center font-semibold z-50 shadow-lg">
-                        <div className="max-w-4xl mx-auto flex items-center justify-center gap-2">
-                            <span className="text-2xl">🚧</span>
-                            <span>Site en construction • Testez notre prototype et donnez-nous votre avis !</span>
-                            <span className="text-2xl">🚧</span>
-                        </div>
-                    </div>
-                    <div className="text-center animate-fade-in mt-16">
-                        <div className="mb-6 flex justify-center">
-                            <img src="Logo1.PNG" alt="Fresheur Logo" className="w-64 h-64 object-contain drop-shadow-2xl" />
-                        </div>
-                        <h1 className="text-5xl font-bold text-white mb-4">Fresheur</h1>
-                        <p className="text-xl text-white opacity-90 mb-8 max-w-md mx-auto">
-                            Recettes personnalisées liste de courses adaptée et budget maîtrisé ! 
-                        </p>
-                        <button
-                            onClick={onStart}
-                            className="bg-white text-green-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-gray-50 transition shadow-lg"
-                        >
-                            Commencer →
-                        </button>
-                        <p className="text-white opacity-75 mt-6 text-sm">
-                             Pensé pour faire face aux tracas du quotidien
-                        </p>
-                    </div>
-                </div>
-            );
-        }
-
-        function ProfileSetup({ userProfile, onSave }) {
-            const [profile, setProfile] = useState(userProfile);
-
-            const toggleExcluded = (ingredient) => {
-                if (profile.excludedIngredients.includes(ingredient)) {
-                    setProfile({
-                        ...profile,
-                        excludedIngredients: profile.excludedIngredients.filter(i => i !== ingredient)
-                    });
-                } else {
-                    setProfile({
-                        ...profile,
-                        excludedIngredients: [...profile.excludedIngredients, ingredient]
-                    });
-                }
-            };
-
-            const handleSubmit = (e) => {
-                e.preventDefault();
-                onSave(profile);
-            };
-
-            return (
-                <div className="min-h-screen bg-gray-50 py-8 px-4">
-                    <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-lg p-8 animate-fade-in">
-                        <div className="text-center mb-8">
-                            <h2 className="text-3xl font-bold text-gray-800 mb-2">Créez votre profil</h2>
-                            <p className="text-gray-600">Pour des recettes sur-mesure</p>
-                        </div>
-
-                        <form onSubmit={handleSubmit} className="space-y-6">
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                    Votre prénom
-                                </label>
-                                <input
-                                    type="text"
-                                    value={profile.name}
-                                    onChange={(e) => setProfile({...profile, name: e.target.value})}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                                    placeholder="Ex: Marie"
-                                    required
-                                />
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                    Nombre de personnes dans votre foyer
-                                </label>
-                                <select
-                                    value={profile.household}
-                                    onChange={(e) => setProfile({...profile, household: parseInt(e.target.value)})}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                                >
-                                    {[1,2,3,4,5,6].map(n => (
-                                        <option key={n} value={n}>{n} personne{n>1?'s':''}</option>
-                                    ))}
-                                </select>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-3">
-                                    Régime alimentaire
-                                </label>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                    {DIETARY_OPTIONS.map(option => (
-                                        <label 
-                                            key={option.id}
-                                            className={`border-2 rounded-lg p-4 cursor-pointer transition ${
-                                                profile.dietary === option.id 
-                                                    ? 'border-green-500 bg-green-50' 
-                                                    : 'border-gray-200 hover:border-gray-300'
-                                            }`}
-                                        >
-                                            <input
-                                                type="radio"
-                                                name="dietary"
-                                                value={option.id}
-                                                checked={profile.dietary === option.id}
-                                                onChange={(e) => setProfile({...profile, dietary: e.target.value})}
-                                                className="hidden"
-                                            />
-                                            <div className="font-semibold text-gray-800">{option.name}</div>
-                                            <div className="text-sm text-gray-600">{option.description}</div>
-                                        </label>
-                                    ))}
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-3">
-                                    Ingrédients à exclure (allergies, intolérances)
-                                </label>
-                                <div className="flex flex-wrap gap-2">
-                                    {COMMON_ALLERGENS.map(allergen => (
-                                        <button
-                                            key={allergen}
-                                            type="button"
-                                            onClick={() => toggleExcluded(allergen)}
-                                            className={`px-4 py-2 rounded-full text-sm font-medium transition ${
-                                                profile.excludedIngredients.includes(allergen)
-                                                    ? 'bg-red-500 text-white'
-                                                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                                            }`}
-                                        >
-                                            {allergen}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                    Budget courses hebdomadaire: {profile.weeklyBudget}€
-                                </label>
-                                <input
-                                    type="range"
-                                    min="20"
-                                    max="200"
-                                    step="10"
-                                    value={profile.weeklyBudget}
-                                    onChange={(e) => setProfile({...profile, weeklyBudget: parseInt(e.target.value)})}
-                                    className="w-full"
-                                />
-                                <div className="flex justify-between text-xs text-gray-500 mt-1">
-                                    <span>20€</span>
-                                    <span>200€</span>
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                    Magasin préféré
-                                </label>
-                                <select
-                                    value={profile.preferredStore}
-                                    onChange={(e) => setProfile({...profile, preferredStore: e.target.value})}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                                >
-                                    {STORES.map(store => (
-                                        <option key={store} value={store}>{store}</option>
-                                    ))}
-                                </select>
-                            </div>
-
-                            <button
-                                type="submit"
-                                className="w-full fresh-gradient text-white py-4 rounded-lg font-semibold text-lg hover:opacity-90 transition shadow-lg"
-                            >
-                                Sauvegarder mon profil
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            );
-        }
-
-        function Header({ userProfile, onProfile }) {
-            return (
-                <>
-                    {/* Construction Banner */}
-                    <div className="bg-yellow-400 text-gray-900 py-2 px-4 text-center text-sm font-semibold">
-                        🚧 Version Beta • Site en construction 🚧
-                    </div>
-                    <header className="bg-white shadow-sm sticky top-0 z-50">
-                    <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                            <img src="Logo1.PNG" alt="Fresheur" className="w-10 h-10 object-contain" />
-                            <h1 className="text-2xl font-bold text-gray-800">Fresheur.be</h1>
-                        </div>
-                        <div className="flex items-center space-x-4">
-                            <div className="text-right hidden md:block">
-                                <p className="text-sm text-gray-600">Bonjour, {userProfile.name}!</p>
-                                <p className="text-xs text-gray-500">Budget: {userProfile.weeklyBudget}€/sem</p>
-                            </div>
-                            <button
-                                onClick={onProfile}
-                                className="px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition text-sm font-medium"
-                            >
-                                ⚙️ Profil
-                            </button>
-                        </div>
-                    </div>
-                </header>
-                </>
-            );
-        }
-
-        function RecipeSelection({ recipes, selectedRecipes, onToggle, userProfile }) {
-            const [filter, setFilter] = useState('all');
-
-            const categories = ['all', ...new Set(recipes.map(r => r.category))];
-            
-            const filteredByCategory = filter === 'all' 
-                ? recipes 
-                : recipes.filter(r => r.category === filter);
-
-            return (
-                <div className="max-w-7xl mx-auto px-4 py-8 pb-32">
-                    <div className="mb-8">
-                        <h2 className="text-3xl font-bold text-gray-800 mb-2">Choisissez vos recettes</h2>
-                        <p className="text-gray-600">Sélectionnez les plats qui vous font envie cette semaine</p>
-                    </div>
-
-                    <div className="flex flex-wrap gap-2 mb-8">
-                        {categories.map(cat => (
-                            <button
-                                key={cat}
-                                onClick={() => setFilter(cat)}
-                                className={`px-4 py-2 rounded-full text-sm font-medium transition ${
-                                    filter === cat
-                                        ? 'fresh-gradient text-white'
-                                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                                }`}
-                            >
-                                {cat === 'all' ? 'Toutes' : cat}
-                            </button>
-                        ))}
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {filteredByCategory.map(recipe => {
-                            const isSelected = selectedRecipes.find(r => r.id === recipe.id);
-                            return (
-                                <div
-                                    key={recipe.id}
-                                    onClick={() => onToggle(recipe)}
-                                    className={`recipe-card bg-white rounded-xl shadow-md p-6 card-hover ${isSelected ? 'selected' : ''}`}
-                                >
-                                    <div className="text-5xl mb-3">{recipe.image}</div>
-                                    <h3 className="text-xl font-bold text-gray-800 mb-2">{recipe.name}</h3>
-                                    <div className="flex flex-wrap gap-2 mb-3">
-                                        <span className="badge bg-blue-100 text-blue-800">⏱️ {recipe.time} min</span>
-                                        <span className="badge bg-purple-100 text-purple-800">👨‍🍳 {recipe.difficulty}</span>
-                                        <span className="badge bg-green-100 text-green-800">💰 {recipe.price.toFixed(2)}€</span>
-                                    </div>
-                                    <p className="text-sm text-gray-600 mb-2">
-                                        {recipe.servings} personnes • {recipe.ingredients.length} ingrédients
-                                    </p>
-                                    {isSelected && (
-                                        <div className="mt-3 text-green-600 font-semibold flex items-center">
-                                            ✓ Ajoutée à votre menu
-                                        </div>
-                                    )}
-                                </div>
-                            );
-                        })}
-                    </div>
-
-                    {filteredByCategory.length === 0 && (
-                        <div className="text-center py-12">
-                            <p className="text-gray-500 text-lg">Aucune recette ne correspond à vos critères</p>
-                            <p className="text-gray-400 text-sm mt-2">Essayez de modifier vos filtres ou votre profil</p>
-                        </div>
-                    )}
-                </div>
-            );
-        }
-
-        function ShoppingList({ shoppingList, commonIngredients, totalCost, userProfile, onBack, onUpdate, onUpdateCommon }) {
-            const toggleItem = (itemName) => {
-                onUpdate(shoppingList.map(item => 
-                    item.name === itemName ? {...item, checked: !item.checked} : item
-                ));
-            };
-
-            const toggleCommonItem = (itemName) => {
-                onUpdateCommon(commonIngredients.map(item => 
-                    item.name === itemName ? {...item, checked: !item.checked} : item
-                ));
-            };
-
-            const removeCommonItem = (itemName) => {
-                onUpdateCommon(commonIngredients.filter(item => item.name !== itemName));
-            };
-
-            const groupedByCategory = shoppingList.reduce((acc, item) => {
-                if (!acc[item.category]) acc[item.category] = [];
-                acc[item.category].push(item);
-                return acc;
-            }, {});
-
-            const checkedCommonTotal = commonIngredients
-                .filter(item => item.checked)
-                .reduce((sum, item) => sum + item.price, 0);
-
-            const finalTotal = totalCost + checkedCommonTotal;
-
-            return (
-                <div className="min-h-screen bg-gray-50">
-                    <header className="bg-white shadow-sm sticky top-0 z-50">
-                        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-                            <button
-                                onClick={onBack}
-                                className="px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition text-sm font-medium"
-                            >
-                                ← Retour aux recettes
-                            </button>
-                            <div className="text-right">
-                                <p className="font-bold text-lg text-gray-800">{finalTotal.toFixed(2)}€</p>
-                                <p className="text-xs text-gray-500">Total estimé</p>
-                            </div>
-                        </div>
-                    </header>
-
-                    <div className="max-w-4xl mx-auto px-4 py-8">
-                        <div className="mb-8">
-                            <h2 className="text-3xl font-bold text-gray-800 mb-2">Votre liste de courses</h2>
-                            <p className="text-gray-600">Basée sur vos recettes • {userProfile.preferredStore}</p>
-                        </div>
-
-                        {commonIngredients.length > 0 && (
-                            <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-6 mb-6">
-                                <h3 className="font-bold text-lg text-gray-800 mb-3">
-                                    💡 Vous avez peut-être déjà ces ingrédients
-                                </h3>
-                                <p className="text-sm text-gray-600 mb-4">
-                                    Cochez ceux que vous possédez déjà pour les ajouter au coût total
-                                </p>
-                                <div className="space-y-2">
-                                    {commonIngredients.map(item => (
-                                        <div key={item.name} className="flex items-center justify-between bg-white rounded-lg p-3">
-                                            <label className="flex items-center space-x-3 cursor-pointer flex-1">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={item.checked || false}
-                                                    onChange={() => toggleCommonItem(item.name)}
-                                                    className="w-5 h-5 text-yellow-600 rounded focus:ring-yellow-500"
-                                                />
-                                                <div className="flex-1">
-                                                    <span className="text-gray-800 font-medium">{item.name}</span>
-                                                    <span className="text-gray-500 text-sm ml-2">({item.amount})</span>
-                                                </div>
-                                            </label>
-                                            <div className="flex items-center space-x-3">
-                                                <span className="text-gray-600 font-semibold">{item.price.toFixed(2)}€</span>
-                                                <button
-                                                    onClick={() => removeCommonItem(item.name)}
-                                                    className="text-red-500 hover:text-red-700 text-sm"
-                                                >
-                                                    ✕
-                                                </button>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                                {checkedCommonTotal > 0 && (
-                                    <p className="text-sm text-yellow-700 mt-3 font-semibold">
-                                        +{checkedCommonTotal.toFixed(2)}€ ajoutés au total
-                                    </p>
-                                )}
-                            </div>
-                        )}
-
-                        {Object.entries(groupedByCategory).map(([category, items]) => (
-                            <div key={category} className="bg-white rounded-xl shadow-md p-6 mb-4">
-                                <h3 className="font-bold text-lg text-gray-800 mb-4 border-b pb-2">
-                                    {category}
-                                </h3>
-                                <div className="space-y-3">
-                                    {items.map(item => (
-                                        <div 
-                                            key={item.name}
-                                            className={`flex items-center justify-between p-3 rounded-lg transition ${
-                                                item.checked ? 'bg-gray-50 opacity-60' : 'hover:bg-gray-50'
-                                            }`}
-                                        >
-                                            <label className="flex items-center space-x-3 cursor-pointer flex-1">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={item.checked}
-                                                    onChange={() => toggleItem(item.name)}
-                                                    className="w-5 h-5 text-green-600 rounded focus:ring-green-500"
-                                                />
-                                                <div className="flex-1">
-                                                    <div className={`font-medium ${item.checked ? 'line-through text-gray-500' : 'text-gray-800'}`}>
-                                                        {item.name}
-                                                    </div>
-                                                    <div className="text-sm text-gray-500">
-                                                        {item.amount} • Pour: {item.recipes.join(', ')}
-                                                    </div>
-                                                </div>
-                                            </label>
-                                            <span className={`font-semibold ${item.checked ? 'text-gray-400' : 'text-gray-700'}`}>
-                                                {item.price.toFixed(2)}€
-                                            </span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        ))}
-
-                        <div className="bg-gradient-to-r from-green-500 to-teal-500 text-white rounded-xl p-6 shadow-lg">
-                            <div className="flex justify-between items-center mb-4">
-                                <div>
-                                    <p className="text-sm opacity-90">Total estimé</p>
-                                    <p className="text-3xl font-bold">{finalTotal.toFixed(2)}€</p>
-                                </div>
-                                <div className="text-right">
-                                    <p className="text-sm opacity-90">Budget restant</p>
-                                    <p className="text-2xl font-bold">
-                                        {(userProfile.weeklyBudget - finalTotal).toFixed(2)}€
-                                    </p>
-                                </div>
-                            </div>
-                            <button className="w-full bg-white text-green-600 py-3 rounded-lg font-semibold hover:bg-gray-50 transition">
-                                🚚 Commander chez {userProfile.preferredStore}
-                            </button>
-                            <p className="text-center text-xs opacity-75 mt-3">
-                                Fonctionnalité de livraison P2P bientôt disponible
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            );
-        }
-
-        ReactDOM.render(<FresheurApp />, document.getElementById('root'));
+        });
     </script>
 </body>
 </html>

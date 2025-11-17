@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Créez vos repas délicieux - Meal Planner</title>
+    <title>Créez des repas délicieux - Meal Planner</title>
     <style>
         * {
             margin: 0;
@@ -19,8 +19,16 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
+        }
+
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
         }
 
         /* Header */
@@ -53,6 +61,13 @@
         .subtitle {
             font-size: 16px;
             color: #7f8c8d;
+        }
+
+        .title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 10px;
         }
 
         /* Main Card */
@@ -306,6 +321,229 @@
             z-index: 1;
         }
 
+        /* Back Button */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 50px;
+            color: #2c3e50;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+
+        .back-btn:hover {
+            border-color: #4CAF50;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+        }
+
+        /* Filter Summary */
+        .filter-summary {
+            background: white;
+            border-radius: 16px;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .filter-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-right: 8px;
+        }
+
+        .tag {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Loading Animation */
+        .loading-container {
+            text-align: center;
+            padding: 60px 20px;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .loading-spinner {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 30px;
+            border: 6px solid #e0e0e0;
+            border-top: 6px solid #4CAF50;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading-text {
+            font-size: 20px;
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .loading-subtext {
+            color: #7f8c8d;
+            font-size: 16px;
+        }
+
+        /* Recipe Grid */
+        .recipes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 24px;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .recipe-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            animation: scaleIn 0.4s ease;
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        }
+
+        .recipe-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .recipe-content {
+            padding: 24px;
+        }
+
+        .recipe-header {
+            margin-bottom: 16px;
+        }
+
+        .recipe-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .recipe-description {
+            color: #7f8c8d;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+
+        .recipe-meta {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .meta-icon {
+            font-size: 18px;
+        }
+
+        .recipe-badges {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .badge {
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-difficulty {
+            background: #E3F2FD;
+            color: #1976D2;
+        }
+
+        .badge-budget {
+            background: #FFF3E0;
+            color: #F57C00;
+        }
+
+        .badge-diet {
+            background: #E8F5E9;
+            color: #388E3C;
+        }
+
+        .recipe-footer {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #2c3e50;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
         /* Animations */
         @keyframes fadeInDown {
             from {
@@ -329,12 +567,19 @@
             }
         }
 
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
             }
-            50% {
-                transform: scale(1.05);
+            to {
+                opacity: 1;
+                transform: scale(1);
             }
         }
 
@@ -344,7 +589,7 @@
                 padding: 24px;
             }
 
-            .tagline {
+            .tagline, .title {
                 font-size: 22px;
             }
 
@@ -355,159 +600,430 @@
             .equipment-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
+
+            .recipes-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-tags {
+                flex-direction: column;
+                align-items: flex-start;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <div class="logo-container">
-                <img src="Logo1.PNG" alt="Logo" class="logo">
+        <!-- FORM VIEW -->
+        <div id="formView" class="view active">
+            <div class="header">
+                <div class="logo-container">
+                    <img src="computer:///mnt/user-data/outputs/Logo1.PNG" alt="Logo" class="logo">
+                </div>
+                <h1 class="tagline">Créez des repas délicieux en un clic</h1>
+                <p class="subtitle">Personnalisez votre expérience culinaire</p>
             </div>
-            <h1 class="tagline">Créez des repas délicieux en un clic</h1>
-            <p class="subtitle">Personnalisez votre expérience culinaire</p>
+
+            <div class="main-card">
+                <div class="section">
+                    <h2 class="section-title">
+                        <span class="section-icon">🥗</span>
+                        Régime alimentaire
+                    </h2>
+                    <div class="select-wrapper">
+                        <select id="regime">
+                            <option value="">Aucune restriction</option>
+                            <option value="vegetarien">Végétarien</option>
+                            <option value="vegan">Vegan</option>
+                            <option value="sans-gluten">Sans gluten</option>
+                            <option value="paleo">Paléo</option>
+                            <option value="keto">Keto</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2 class="section-title">
+                        <span class="section-icon">👨‍🍳</span>
+                        Style de recette
+                    </h2>
+                    <div class="select-wrapper">
+                        <select id="style">
+                            <option value="">Tous les styles</option>
+                            <option value="francaise">Française</option>
+                            <option value="italienne">Italienne</option>
+                            <option value="asiatique">Asiatique</option>
+                            <option value="mexicaine">Mexicaine</option>
+                            <option value="mediterraneenne">Méditerranéenne</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2 class="section-title">
+                        <span class="section-icon">🍽️</span>
+                        Plat du quotidien
+                    </h2>
+                    <div class="select-wrapper">
+                        <select id="plat">
+                            <option value="">Tous les plats</option>
+                            <option value="entree">Entrée</option>
+                            <option value="plat-principal">Plat principal</option>
+                            <option value="dessert">Dessert</option>
+                            <option value="petit-dejeuner">Petit-déjeuner</option>
+                            <option value="gouter">Goûter</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2 class="section-title">
+                        <span class="section-icon">💰</span>
+                        Budget
+                    </h2>
+                    <div class="budget-container">
+                        <div class="budget-labels">
+                            <span>Économique</span>
+                            <span>Moyen</span>
+                            <span>Premium</span>
+                        </div>
+                        <input type="range" class="budget-slider" min="1" max="3" value="2" id="budget">
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2 class="section-title">
+                        <span class="section-icon">👥</span>
+                        Nombre de personnes
+                    </h2>
+                    <div class="people-grid">
+                        <button class="people-btn" data-value="1">1</button>
+                        <button class="people-btn active" data-value="2">2</button>
+                        <button class="people-btn" data-value="3">3</button>
+                        <button class="people-btn" data-value="4">4</button>
+                        <button class="people-btn" data-value="5">5</button>
+                        <button class="people-btn" data-value="6">6</button>
+                        <button class="people-btn" data-value="7">7</button>
+                        <button class="people-btn" data-value="8">8+</button>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2 class="section-title">
+                        <span class="section-icon">🔧</span>
+                        Équipements disponibles
+                    </h2>
+                    <div class="equipment-grid">
+                        <div class="equipment-card selected" data-equipment="four">
+                            <div class="equipment-icon">🔥</div>
+                            <div class="equipment-name">Four</div>
+                        </div>
+                        <div class="equipment-card" data-equipment="airfryer">
+                            <div class="equipment-icon">🌪️</div>
+                            <div class="equipment-name">Air Fryer</div>
+                        </div>
+                        <div class="equipment-card" data-equipment="taque">
+                            <div class="equipment-icon">🍳</div>
+                            <div class="equipment-name">Taque de cuisson</div>
+                        </div>
+                        <div class="equipment-card selected" data-equipment="robot">
+                            <div class="equipment-icon">🤖</div>
+                            <div class="equipment-name">Robot cuiseur</div>
+                        </div>
+                        <div class="equipment-card" data-equipment="friteuse">
+                            <div class="equipment-icon">🍟</div>
+                            <div class="equipment-name">Friteuse</div>
+                        </div>
+                        <div class="equipment-card" data-equipment="gril">
+                            <div class="equipment-icon">🔥</div>
+                            <div class="equipment-name">Gril</div>
+                        </div>
+                        <div class="equipment-card" data-equipment="microondes">
+                            <div class="equipment-icon">📻</div>
+                            <div class="equipment-name">Micro-ondes</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="generate-section">
+                    <button class="generate-btn" id="generateBtn">
+                        <span class="btn-text">🎯 Générer 10 recettes</span>
+                    </button>
+                </div>
+            </div>
         </div>
 
-        <!-- Main Card -->
-        <div class="main-card">
-            <!-- Régime Alimentaire -->
-            <div class="section">
-                <h2 class="section-title">
-                    <span class="section-icon">🥗</span>
-                    Régime alimentaire
-                </h2>
-                <div class="select-wrapper">
-                    <select id="regime">
-                        <option value="">Aucune restriction</option>
-                        <option value="vegetarien">Végétarien</option>
-                        <option value="vegan">Vegan</option>
-                        <option value="sans-gluten">Sans gluten</option>
-                        <option value="paleo">Paléo</option>
-                        <option value="keto">Keto</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Style de Recette -->
-            <div class="section">
-                <h2 class="section-title">
-                    <span class="section-icon">👨‍🍳</span>
-                    Style de recette
-                </h2>
-                <div class="select-wrapper">
-                    <select id="style">
-                        <option value="">Tous les styles</option>
-                        <option value="francaise">Française</option>
-                        <option value="italienne">Italienne</option>
-                        <option value="asiatique">Asiatique</option>
-                        <option value="mexicaine">Mexicaine</option>
-                        <option value="mediterraneenne">Méditerranéenne</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Plat du Quotidien -->
-            <div class="section">
-                <h2 class="section-title">
-                    <span class="section-icon">🍽️</span>
-                    Plat du quotidien
-                </h2>
-                <div class="select-wrapper">
-                    <select id="plat">
-                        <option value="">Tous les plats</option>
-                        <option value="entree">Entrée</option>
-                        <option value="plat-principal">Plat principal</option>
-                        <option value="dessert">Dessert</option>
-                        <option value="petit-dejeuner">Petit-déjeuner</option>
-                        <option value="gouter">Goûter</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Budget -->
-            <div class="section">
-                <h2 class="section-title">
-                    <span class="section-icon">💰</span>
-                    Budget
-                </h2>
-                <div class="budget-container">
-                    <div class="budget-labels">
-                        <span>Économique</span>
-                        <span>Moyen</span>
-                        <span>Premium</span>
-                    </div>
-                    <input type="range" class="budget-slider" min="1" max="3" value="2" id="budget">
-                </div>
-            </div>
-
-            <!-- Nombre de Personnes -->
-            <div class="section">
-                <h2 class="section-title">
-                    <span class="section-icon">👥</span>
-                    Nombre de personnes
-                </h2>
-                <div class="people-grid">
-                    <button class="people-btn" data-value="1">1</button>
-                    <button class="people-btn active" data-value="2">2</button>
-                    <button class="people-btn" data-value="3">3</button>
-                    <button class="people-btn" data-value="4">4</button>
-                    <button class="people-btn" data-value="5">5</button>
-                    <button class="people-btn" data-value="6">6</button>
-                    <button class="people-btn" data-value="7">7</button>
-                    <button class="people-btn" data-value="8">8+</button>
-                </div>
-            </div>
-
-            <!-- Équipements Disponibles -->
-            <div class="section">
-                <h2 class="section-title">
-                    <span class="section-icon">🔧</span>
-                    Équipements disponibles
-                </h2>
-                <div class="equipment-grid">
-                    <div class="equipment-card selected" data-equipment="four">
-                        <div class="equipment-icon">🔥</div>
-                        <div class="equipment-name">Four</div>
-                    </div>
-                    <div class="equipment-card" data-equipment="airfryer">
-                        <div class="equipment-icon">🌪️</div>
-                        <div class="equipment-name">Air Fryer</div>
-                    </div>
-                    <div class="equipment-card" data-equipment="taque">
-                        <div class="equipment-icon">🍳</div>
-                        <div class="equipment-name">Taque de cuisson</div>
-                    </div>
-                    <div class="equipment-card selected" data-equipment="robot">
-                        <div class="equipment-icon">🤖</div>
-                        <div class="equipment-name">Robot cuiseur</div>
-                    </div>
-                    <div class="equipment-card" data-equipment="friteuse">
-                        <div class="equipment-icon">🍟</div>
-                        <div class="equipment-name">Friteuse</div>
-                    </div>
-                    <div class="equipment-card" data-equipment="gril">
-                        <div class="equipment-icon">🔥</div>
-                        <div class="equipment-name">Gril</div>
-                    </div>
-                    <div class="equipment-card" data-equipment="microondes">
-                        <div class="equipment-icon">📻</div>
-                        <div class="equipment-name">Micro-ondes</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Generate Button -->
-            <div class="generate-section">
-                <button class="generate-btn" id="generateBtn">
-                    <span class="btn-text">🎯 Générer 10 recettes</span>
+        <!-- RESULTS VIEW -->
+        <div id="resultsView" class="view">
+            <div class="header">
+                <img src="computer:///mnt/user-data/outputs/Logo1.PNG" alt="Logo" class="logo">
+                <h1 class="title">Vos Recettes Personnalisées</h1>
+                <p class="subtitle" id="recipeCount">10 recettes générées selon vos préférences</p>
+                <button class="back-btn" id="backBtn">
+                    ← Nouvelle recherche
                 </button>
+            </div>
+
+            <div class="filter-summary">
+                <div class="filter-tags">
+                    <span class="filter-label">Filtres actifs:</span>
+                    <div id="activeTags"></div>
+                </div>
+            </div>
+
+            <div class="loading-container" id="loadingContainer">
+                <div class="loading-spinner"></div>
+                <div class="loading-text">✨ Génération de vos recettes...</div>
+                <div class="loading-subtext">Nous préparons des suggestions délicieuses pour vous</div>
+            </div>
+
+            <div class="recipes-grid" id="recipesGrid" style="display: none;">
+                <!-- Recipes will be generated here -->
             </div>
         </div>
     </div>
 
     <script>
-        // People counter
+        // Recipe database
+        const recipeDatabase = {
+            vegetarien: [
+                {
+                    title: "Curry de légumes indien",
+                    description: "Un curry crémeux aux légumes de saison avec du lait de coco et des épices authentiques",
+                    time: "35 min",
+                    difficulty: "Facile",
+                    budget: "Économique",
+                    servings: 4,
+                    image: "https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=500"
+                },
+                {
+                    title: "Buddha Bowl quinoa",
+                    description: "Bowl coloré avec quinoa, avocat, pois chiches rôtis et sauce tahini maison",
+                    time: "25 min",
+                    difficulty: "Facile",
+                    budget: "Moyen",
+                    servings: 2,
+                    image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500"
+                },
+                {
+                    title: "Lasagnes aux légumes",
+                    description: "Lasagnes généreuses avec aubergines, courgettes et sauce béchamel crémeuse",
+                    time: "60 min",
+                    difficulty: "Moyen",
+                    budget: "Moyen",
+                    servings: 6,
+                    image: "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=500"
+                },
+                {
+                    title: "Salade méditerranéenne",
+                    description: "Salade fraîche avec feta, olives, tomates et vinaigrette au citron",
+                    time: "15 min",
+                    difficulty: "Facile",
+                    budget: "Économique",
+                    servings: 4,
+                    image: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=500"
+                }
+            ],
+            
+            standard: [
+                {
+                    title: "Poulet rôti aux herbes",
+                    description: "Poulet doré et croustillant avec pommes de terre et légumes racines",
+                    time: "75 min",
+                    difficulty: "Moyen",
+                    budget: "Moyen",
+                    servings: 4,
+                    image: "https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=500"
+                },
+                {
+                    title: "Bœuf bourguignon",
+                    description: "Ragoût traditionnel français mijoté au vin rouge avec carottes et champignons",
+                    time: "150 min",
+                    difficulty: "Difficile",
+                    budget: "Premium",
+                    servings: 6,
+                    image: "https://images.unsplash.com/photo-1600891964092-4316c288032e?w=500"
+                },
+                {
+                    title: "Tacos au poulet",
+                    description: "Tacos croustillants garnis de poulet épicé, guacamole et salsa fraîche",
+                    time: "30 min",
+                    difficulty: "Facile",
+                    budget: "Économique",
+                    servings: 4,
+                    image: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=500"
+                },
+                {
+                    title: "Saumon grillé teriyaki",
+                    description: "Pavé de saumon laqué sauce teriyaki avec riz et légumes vapeur",
+                    time: "25 min",
+                    difficulty: "Facile",
+                    budget: "Premium",
+                    servings: 2,
+                    image: "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=500"
+                }
+            ],
+
+            italienne: [
+                {
+                    title: "Risotto aux champignons",
+                    description: "Risotto crémeux aux champignons de Paris et parmesan",
+                    time: "40 min",
+                    difficulty: "Moyen",
+                    budget: "Moyen",
+                    servings: 4,
+                    image: "https://images.unsplash.com/photo-1476124369491-f51c707c8a90?w=500"
+                },
+                {
+                    title: "Pasta carbonara",
+                    description: "Pâtes crémeuses avec pancetta, œufs et pecorino romano",
+                    time: "20 min",
+                    difficulty: "Facile",
+                    budget: "Économique",
+                    servings: 2,
+                    image: "https://images.unsplash.com/photo-1612874742237-6526221588e3?w=500"
+                },
+                {
+                    title: "Pizza margherita maison",
+                    description: "Pizza artisanale avec sauce tomate, mozzarella et basilic frais",
+                    time: "90 min",
+                    difficulty: "Moyen",
+                    budget: "Économique",
+                    servings: 4,
+                    image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=500"
+                },
+                {
+                    title: "Osso buco milanais",
+                    description: "Jarret de veau braisé avec gremolata et risotto safran",
+                    time: "120 min",
+                    difficulty: "Difficile",
+                    budget: "Premium",
+                    servings: 4,
+                    image: "https://images.unsplash.com/photo-1544025162-d76694265947?w=500"
+                }
+            ],
+
+            asiatique: [
+                {
+                    title: "Pad Thaï aux crevettes",
+                    description: "Nouilles de riz sautées aux crevettes, cacahuètes et sauce tamarin",
+                    time: "25 min",
+                    difficulty: "Moyen",
+                    budget: "Moyen",
+                    servings: 2,
+                    image: "https://images.unsplash.com/photo-1559314809-0d155014e29e?w=500"
+                },
+                {
+                    title: "Sushi rolls maison",
+                    description: "Makis variés au saumon, avocat et concombre",
+                    time: "45 min",
+                    difficulty: "Difficile",
+                    budget: "Premium",
+                    servings: 4,
+                    image: "https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=500"
+                },
+                {
+                    title: "Nouilles sautées aux légumes",
+                    description: "Wok de nouilles chinoises avec légumes croquants et sauce soja",
+                    time: "20 min",
+                    difficulty: "Facile",
+                    budget: "Économique",
+                    servings: 3,
+                    image: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500"
+                },
+                {
+                    title: "Curry vert thaï",
+                    description: "Curry parfumé au lait de coco avec poulet et bambou",
+                    time: "35 min",
+                    difficulty: "Moyen",
+                    budget: "Moyen",
+                    servings: 4,
+                    image: "https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=500"
+                }
+            ],
+
+            dessert: [
+                {
+                    title: "Tiramisu classique",
+                    description: "Dessert italien crémeux au café et mascarpone",
+                    time: "30 min",
+                    difficulty: "Facile",
+                    budget: "Moyen",
+                    servings: 6,
+                    image: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=500"
+                },
+                {
+                    title: "Tarte aux pommes",
+                    description: "Tarte française traditionnelle aux pommes caramélisées",
+                    time: "60 min",
+                    difficulty: "Moyen",
+                    budget: "Économique",
+                    servings: 8,
+                    image: "https://images.unsplash.com/photo-1535920527002-b35e96722eb9?w=500"
+                },
+                {
+                    title: "Brownies au chocolat",
+                    description: "Brownies fondants avec pépites de chocolat et noix",
+                    time: "35 min",
+                    difficulty: "Facile",
+                    budget: "Économique",
+                    servings: 12,
+                    image: "https://images.unsplash.com/photo-1607920591413-4ec007e70023?w=500"
+                },
+                {
+                    title: "Crème brûlée vanille",
+                    description: "Dessert français raffiné avec croûte caramélisée craquante",
+                    time: "45 min",
+                    difficulty: "Moyen",
+                    budget: "Moyen",
+                    servings: 6,
+                    image: "https://images.unsplash.com/photo-1470124182917-cc6e71b22ecc?w=500"
+                }
+            ],
+
+            petitdejeuner: [
+                {
+                    title: "Pancakes américains",
+                    description: "Pancakes moelleux avec sirop d'érable et fruits frais",
+                    time: "20 min",
+                    difficulty: "Facile",
+                    budget: "Économique",
+                    servings: 4,
+                    image: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=500"
+                },
+                {
+                    title: "Œufs Benedict",
+                    description: "Œufs pochés sur muffins anglais avec sauce hollandaise",
+                    time: "25 min",
+                    difficulty: "Moyen",
+                    budget: "Moyen",
+                    servings: 2,
+                    image: "https://images.unsplash.com/photo-1608039829572-78524f79c4c7?w=500"
+                },
+                {
+                    title: "Granola maison",
+                    description: "Mélange croquant d'avoine, noix et fruits secs au miel",
+                    time: "40 min",
+                    difficulty: "Facile",
+                    budget: "Économique",
+                    servings: 10,
+                    image: "https://images.unsplash.com/photo-1588137378633-dea1336ce1e2?w=500"
+                },
+                {
+                    title: "Croissants au beurre",
+                    description: "Viennoiseries feuilletées dorées et croustillantes",
+                    time: "180 min",
+                    difficulty: "Difficile",
+                    budget: "Moyen",
+                    servings: 8,
+                    image: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=500"
+                }
+            ]
+        };
+
+        let currentParams = {};
+
+        // Form interactions
         const peopleButtons = document.querySelectorAll('.people-btn');
         peopleButtons.forEach(btn => {
             btn.addEventListener('click', function() {
@@ -516,7 +1032,6 @@
             });
         });
 
-        // Equipment selection
         const equipmentCards = document.querySelectorAll('.equipment-card');
         equipmentCards.forEach(card => {
             card.addEventListener('click', function() {
@@ -524,17 +1039,6 @@
             });
         });
 
-        // Generate button animation
-        const generateBtn = document.getElementById('generateBtn');
-        generateBtn.addEventListener('click', function() {
-            this.style.animation = 'pulse 0.6s ease';
-            setTimeout(() => {
-                this.style.animation = '';
-                alert('✨ Génération de vos recettes personnalisées en cours...');
-            }, 600);
-        });
-
-        // Budget slider feedback
         const budgetSlider = document.getElementById('budget');
         budgetSlider.addEventListener('input', function() {
             const container = this.closest('.budget-container');
@@ -547,6 +1051,213 @@
                 container.style.background = 'linear-gradient(135deg, #f953c6 0%, #b91d73 100%)';
             }
         });
+
+        // Generate button
+        document.getElementById('generateBtn').addEventListener('click', function() {
+            // Collect form data
+            const regime = document.getElementById('regime').value;
+            const style = document.getElementById('style').value;
+            const plat = document.getElementById('plat').value;
+            const budget = document.getElementById('budget').value;
+            const peopleBtn = document.querySelector('.people-btn.active');
+            const people = peopleBtn ? peopleBtn.dataset.value : '2';
+            
+            const selectedEquipment = Array.from(document.querySelectorAll('.equipment-card.selected'))
+                .map(card => card.dataset.equipment)
+                .join(',');
+
+            currentParams = {
+                regime: regime || 'standard',
+                style: style || '',
+                plat: plat || '',
+                budget: budget,
+                people: people,
+                equipment: selectedEquipment
+            };
+
+            // Switch to results view
+            showResults();
+        });
+
+        // Back button
+        document.getElementById('backBtn').addEventListener('click', function() {
+            document.getElementById('resultsView').classList.remove('active');
+            document.getElementById('formView').classList.add('active');
+            window.scrollTo(0, 0);
+        });
+
+        // Show results view
+        function showResults() {
+            document.getElementById('formView').classList.remove('active');
+            document.getElementById('resultsView').classList.add('active');
+            document.getElementById('loadingContainer').style.display = 'block';
+            document.getElementById('recipesGrid').style.display = 'none';
+            window.scrollTo(0, 0);
+
+            displayFilters();
+
+            setTimeout(() => {
+                const recipes = generateRecipes();
+                displayRecipes(recipes);
+                document.getElementById('loadingContainer').style.display = 'none';
+                document.getElementById('recipesGrid').style.display = 'grid';
+            }, 2000);
+        }
+
+        // Display active filters
+        function displayFilters() {
+            const tagsContainer = document.getElementById('activeTags');
+            let tags = [];
+
+            const labels = {
+                regime: {
+                    'vegetarien': '🥗 Végétarien',
+                    'vegan': '🌱 Vegan',
+                    'sans-gluten': '🌾 Sans gluten',
+                    'paleo': '🥩 Paléo',
+                    'keto': '🥑 Keto'
+                },
+                style: {
+                    'francaise': '🇫🇷 Française',
+                    'italienne': '🇮🇹 Italienne',
+                    'asiatique': '🥢 Asiatique',
+                    'mexicaine': '🌮 Mexicaine',
+                    'mediterraneenne': '🫒 Méditerranéenne'
+                },
+                plat: {
+                    'entree': '🥗 Entrée',
+                    'plat-principal': '🍽️ Plat principal',
+                    'dessert': '🍰 Dessert',
+                    'petit-dejeuner': '🥞 Petit-déjeuner',
+                    'gouter': '🍪 Goûter'
+                },
+                budget: {
+                    '1': '💰 Économique',
+                    '2': '💰💰 Moyen',
+                    '3': '💰💰💰 Premium'
+                }
+            };
+
+            if (currentParams.regime && currentParams.regime !== 'standard' && labels.regime[currentParams.regime]) {
+                tags.push(`<span class="tag">${labels.regime[currentParams.regime]}</span>`);
+            }
+            if (currentParams.style && labels.style[currentParams.style]) {
+                tags.push(`<span class="tag">${labels.style[currentParams.style]}</span>`);
+            }
+            if (currentParams.plat && labels.plat[currentParams.plat]) {
+                tags.push(`<span class="tag">${labels.plat[currentParams.plat]}</span>`);
+            }
+            tags.push(`<span class="tag">${labels.budget[currentParams.budget]}</span>`);
+            tags.push(`<span class="tag">👥 ${currentParams.people} personne${currentParams.people > 1 ? 's' : ''}</span>`);
+
+            tagsContainer.innerHTML = tags.join('');
+        }
+
+        // Generate recipes based on filters
+        function generateRecipes() {
+            let selectedRecipes = [];
+
+            if (currentParams.plat === 'dessert') {
+                selectedRecipes = [...recipeDatabase.dessert];
+            } else if (currentParams.plat === 'petit-dejeuner') {
+                selectedRecipes = [...recipeDatabase.petitdejeuner];
+            } else if (currentParams.style === 'italienne') {
+                selectedRecipes = [...recipeDatabase.italienne];
+            } else if (currentParams.style === 'asiatique') {
+                selectedRecipes = [...recipeDatabase.asiatique];
+            } else if (currentParams.regime === 'vegetarien') {
+                selectedRecipes = [...recipeDatabase.vegetarien];
+            } else {
+                selectedRecipes = [...recipeDatabase.standard];
+            }
+
+            const allRecipes = [
+                ...recipeDatabase.standard,
+                ...recipeDatabase.vegetarien,
+                ...recipeDatabase.italienne,
+                ...recipeDatabase.asiatique,
+                ...recipeDatabase.dessert,
+                ...recipeDatabase.petitdejeuner
+            ];
+
+            while (selectedRecipes.length < 10) {
+                const randomRecipe = allRecipes[Math.floor(Math.random() * allRecipes.length)];
+                if (!selectedRecipes.find(r => r.title === randomRecipe.title)) {
+                    selectedRecipes.push(randomRecipe);
+                }
+            }
+
+            selectedRecipes = selectedRecipes.slice(0, 10);
+
+            const people = parseInt(currentParams.people);
+            selectedRecipes = selectedRecipes.map(recipe => ({
+                ...recipe,
+                servings: people
+            }));
+
+            return selectedRecipes;
+        }
+
+        // Display recipes
+        function displayRecipes(recipes) {
+            const grid = document.getElementById('recipesGrid');
+            
+            grid.innerHTML = recipes.map(recipe => {
+                const budgetLabel = currentParams.budget === '1' ? 'Économique' : 
+                                   currentParams.budget === '3' ? 'Premium' : 'Moyen';
+                
+                const dietLabel = currentParams.regime === 'vegetarien' ? 'Végétarien' :
+                                 currentParams.regime === 'vegan' ? 'Vegan' :
+                                 currentParams.regime === 'sans-gluten' ? 'Sans gluten' : '';
+
+                return `
+                    <div class="recipe-card">
+                        <img src="${recipe.image}" alt="${recipe.title}" class="recipe-image" 
+                             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22500%22 height=%22220%22%3E%3Crect fill=%22%23667eea%22 width=%22500%22 height=%22220%22/%3E%3Ctext fill=%22white%22 font-family=%22Arial%22 font-size=%2224%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22%3E🍽️ ${recipe.title}%3C/text%3E%3C/svg%3E'">
+                        <div class="recipe-content">
+                            <div class="recipe-header">
+                                <h3 class="recipe-title">${recipe.title}</h3>
+                            </div>
+                            <p class="recipe-description">${recipe.description}</p>
+                            
+                            <div class="recipe-meta">
+                                <div class="meta-item">
+                                    <span class="meta-icon">⏱️</span>
+                                    <span>${recipe.time}</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="meta-icon">👥</span>
+                                    <span>${recipe.servings} pers.</span>
+                                </div>
+                            </div>
+
+                            <div class="recipe-badges">
+                                <span class="badge badge-difficulty">${recipe.difficulty}</span>
+                                <span class="badge badge-budget">${budgetLabel}</span>
+                                ${dietLabel ? `<span class="badge badge-diet">${dietLabel}</span>` : ''}
+                            </div>
+
+                            <div class="recipe-footer">
+                                <button class="btn btn-primary" onclick="viewRecipe('${recipe.title}')">
+                                    📖 Voir la recette
+                                </button>
+                                <button class="btn btn-secondary" onclick="saveRecipe('${recipe.title}')">
+                                    ❤️
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function viewRecipe(title) {
+            alert(`📖 Ouverture de la recette: ${title}\n\nFonctionnalité à venir: affichage détaillé avec ingrédients et étapes!`);
+        }
+
+        function saveRecipe(title) {
+            alert(`❤️ Recette "${title}" ajoutée aux favoris!`);
+        }
     </script>
 </body>
 </html>
